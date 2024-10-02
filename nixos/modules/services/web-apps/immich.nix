@@ -94,6 +94,11 @@ in
       default = 3001;
       description = "The port that immich will listen on.";
     };
+    mlPort = mkOption {
+      type = types.port;
+      default = 3003;
+      description = "The port that immich's machine learning functionality will listen on.";
+    };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
@@ -262,7 +267,7 @@ in
         HOST = cfg.host;
         IMMICH_PORT = toString cfg.port;
         IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
-        IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
+        IMMICH_MACHINE_LEARNING_URL = "http://localhost:${toString cfg.mlPort}";
       };
 
     services.immich.machine-learning.environment = {
@@ -270,7 +275,7 @@ in
       MACHINE_LEARNING_WORKER_TIMEOUT = "120";
       MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
       IMMICH_HOST = "localhost";
-      IMMICH_PORT = "3003";
+      IMMICH_PORT = toString cfg.mlPort;
     };
 
     systemd.services.immich-server = {
